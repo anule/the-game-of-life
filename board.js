@@ -36,7 +36,11 @@ Board.prototype.indexFor = function([row, col]) {
 
   // Return undefined if we're out of bounds
   if (row < 0 || row >= this.height || col < 0 || col >= this.width)
+<<<<<<< HEAD
     return
+=======
+    return undefined
+>>>>>>> 404008c2063a74e3a2c86c197a4fabd75855da16
   return row * this.width + col
 }
 
@@ -55,9 +59,8 @@ Board.prototype.get = function (coords) {
  * Set the value of the board at coords to value.
  */
 Board.prototype.set = function(coords, value) {
-  // TODO
-  //convert to 1D coordinate plane
-  this.cells[this.indexFor(coords)] = value;
+  var num = coords[0]*this.width + coords[1]
+  this.cells[num] = value;
 }
 
 /**
@@ -66,10 +69,25 @@ Board.prototype.set = function(coords, value) {
  * Return the count of living neighbors around a given coordinate.
  */
 Board.prototype.livingNeighbors = function([row, col]) {
-  // TODO: Return the count of living neighbors.
-  var index = this.indexFor(row, col); //index
-  console.log(this.cells[index]);
-
+  var array1 = [[row + 1, col + 1],
+            [row + 1, col - 1],
+            [row - 1, col + 1],
+            [row - 1, col - 1],
+            [row, col - 1],
+            [row, col + 1],
+            [row + 1, col],
+            [row - 1, col]];
+  console.log(array1);
+  var newArray = array1.filter(element => {
+    if (this.indexFor(element) === 0) return element
+    return this.indexFor(element)
+  });
+  console.log(newArray)
+  var result = 0;
+  newArray.forEach((value) => {
+    if (this.get(value)) result++
+  })
+  return result
 }
 
 /**
@@ -78,9 +96,8 @@ Board.prototype.livingNeighbors = function([row, col]) {
  * Toggle the cell at coords from alive to dead or vice versa.
  */
 Board.prototype.toggle = function(coords) {
-  // TODO
   var num = coords[0]*this.width + coords[1];
-  this.cells[num] = !this.cells[num];
+  this.cells[num] = !this.cells[num]
 }
 
 /**
@@ -91,16 +108,17 @@ Board.prototype.toggle = function(coords) {
  * @param {Number} numLivingNeighbors
  */
 function conway(isAlive, numLivingNeighbors) {
-  // TODO
   if (isAlive) {
-    if (numLivingNeighbors < 2 || numLivingNeighbors > 3) {
-      isAlive = !isAlive;
-    }
-  } else {
-    if (numLivingNeighbors === 3) {
-      isAlive = !isAlive;
-    }
+    if ((numLivingNeighbors < 2) || (numLivingNeighbors > 3))
+      isAlive = !isAlive
   }
+  else{
+    if (numLivingNeighbors === 3){
+      isAlive = !isAlive
+    }
+
+  }
+  return isAlive
 }
 
 /**
@@ -112,7 +130,6 @@ function conway(isAlive, numLivingNeighbors) {
  * @param {(Boolean, Int) -> Boolean} rules (default: conway)
  */
 function tick(present, future, rules=conway) {
-  // TODO
 
   return [future, present]
 }
