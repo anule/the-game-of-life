@@ -66,13 +66,13 @@ Board.prototype.set = function(coords, value) {
  */
 Board.prototype.livingNeighbors = function([row, col]) {
   var array1 = [[row + 1, col + 1],
-            [row + 1, col - 1],
-            [row - 1, col + 1],
-            [row - 1, col - 1],
-            [row, col - 1],
-            [row, col + 1],
-            [row + 1, col],
-            [row - 1, col]];
+               [row + 1, col - 1],
+               [row - 1, col + 1],
+               [row - 1, col - 1],
+               [row, col - 1],
+               [row, col + 1],
+               [row + 1, col],
+               [row - 1, col]];
   // console.log(array1);
   var newArray = array1.filter(element => {
     if (this.indexFor(element) === 0) return element
@@ -126,14 +126,10 @@ function conway(isAlive, numLivingNeighbors) {
  * @param {(Boolean, Int) -> Boolean} rules (default: conway)
  */
 function tick(present, future, rules=conway) {
-  if (rules === "everythingLives") {
-    future.cells = present.cells.forEach(el => {
-      if(!el) {el = 1;}
-    });
-    console.log(future.cells);
-  }
-  if (rules === 'flip') {
-    future.cells = present.cells.map(x => !x)
+  for (var i = 0; i < present.height; i++){
+    for (var j = 0; j < present.width; j++){
+      future.set([i, j], rules(present.get([i, j]), present.livingNeighbors([i, j])));
+    }
   }
 
   return [future, present];
