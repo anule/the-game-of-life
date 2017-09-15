@@ -36,11 +36,7 @@ Board.prototype.indexFor = function([row, col]) {
 
   // Return undefined if we're out of bounds
   if (row < 0 || row >= this.height || col < 0 || col >= this.width)
-<<<<<<< HEAD
-    return
-=======
     return undefined
->>>>>>> 404008c2063a74e3a2c86c197a4fabd75855da16
   return row * this.width + col
 }
 
@@ -77,12 +73,12 @@ Board.prototype.livingNeighbors = function([row, col]) {
             [row, col + 1],
             [row + 1, col],
             [row - 1, col]];
-  console.log(array1);
+  // console.log(array1);
   var newArray = array1.filter(element => {
     if (this.indexFor(element) === 0) return element
     return this.indexFor(element)
   });
-  console.log(newArray)
+  // console.log(newArray)
   var result = 0;
   newArray.forEach((value) => {
     if (this.get(value)) result++
@@ -130,6 +126,15 @@ function conway(isAlive, numLivingNeighbors) {
  * @param {(Boolean, Int) -> Boolean} rules (default: conway)
  */
 function tick(present, future, rules=conway) {
+  if (rules === "everythingLives") {
+    future.cells = present.cells.forEach(el => {
+      if(!el) {el = 1;}
+    });
+    console.log(future.cells);
+  }
+  if (rules === 'flip') {
+    future.cells = present.cells.map(x => !x)
+  }
 
-  return [future, present]
+  return [future, present];
 }
