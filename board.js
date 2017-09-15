@@ -5,7 +5,7 @@
  * @param {Int} height
  * @param {Array<Int>} cells the array to use for the cells (default: new Uint8Array(width * height))
  */
-function Board(width=32, height=32, cells) {
+function Board(width = 32, height = 32, cells) {
   this.width = width
   this.height = height
   // We'll store our cells in a 1D typed array.
@@ -35,8 +35,7 @@ Board.prototype.indexFor = function([row, col]) {
   // http://2ality.com/2015/01/es6-destructuring.html
 
   // Return undefined if we're out of bounds
-  if (row < 0 || row >= this.height || col < 0 || col >= this.width)
-    return undefined
+  if (row < 0 || row >= this.height || col < 0 || col >= this.width) {return undefined}
   return row * this.width + col
 }
 
@@ -55,7 +54,7 @@ Board.prototype.get = function (coords) {
  * Set the value of the board at coords to value.
  */
 Board.prototype.set = function(coords, value) {
-  var num = coords[0]*this.width + coords[1]
+  var num = coords[0] * this.width + coords[1]
   this.cells[num] = value;
 }
 
@@ -73,12 +72,10 @@ Board.prototype.livingNeighbors = function([row, col]) {
             [row, col + 1],
             [row + 1, col],
             [row - 1, col]];
-  console.log(array1);
   var newArray = array1.filter(element => {
     if (this.indexFor(element) === 0) return element
     return this.indexFor(element)
   });
-  console.log(newArray)
   var result = 0;
   newArray.forEach((value) => {
     if (this.get(value)) result++
@@ -92,7 +89,7 @@ Board.prototype.livingNeighbors = function([row, col]) {
  * Toggle the cell at coords from alive to dead or vice versa.
  */
 Board.prototype.toggle = function(coords) {
-  var num = coords[0]*this.width + coords[1];
+  var num = coords[0] * this.width + coords[1];
   this.cells[num] = !this.cells[num]
 }
 
@@ -105,15 +102,11 @@ Board.prototype.toggle = function(coords) {
  */
 function conway(isAlive, numLivingNeighbors) {
   if (isAlive) {
-    if ((numLivingNeighbors < 2) || (numLivingNeighbors > 3))
-      isAlive = !isAlive
+    if ((numLivingNeighbors < 2) || (numLivingNeighbors > 3)) {isAlive = !isAlive}
   }
-  else{
-    if (numLivingNeighbors === 3){
+  else  if (numLivingNeighbors === 3){
       isAlive = !isAlive
     }
-
-  }
   return isAlive
 }
 
@@ -125,7 +118,14 @@ function conway(isAlive, numLivingNeighbors) {
  * @param {Board!} future (is mutated)
  * @param {(Boolean, Int) -> Boolean} rules (default: conway)
  */
-function tick(present, future, rules=conway) {
 
-  return [future, present]
+
+
+function tick(present, future, rules = conway) {
+  for (var i = 0; i<present.height; i++){
+    for (var j = 0; j< present.width; j++){
+      future.set([i,j], rules(present.get([i,j]), present.livingNeighbors([i,j])))
+    }
+  }
+  return [future,present]
 }
